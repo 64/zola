@@ -34,6 +34,22 @@ pub fn markdown<S: BuildHasher>(
     Ok(to_value(&html).unwrap())
 }
 
+pub fn katex<S: BuildHasher>(
+    value: &Value,
+    args: &HashMap<String, Value, S>,
+) -> TeraResult<Value> {
+    let s = try_get_value!("markdown", "body", String, value);
+    let block = match args.get("block") {
+        Some(val) => try_get_value!("markdown", "block", bool, val),
+        None => false,
+    };
+
+    let opts = katex::Opts::builder().display_mode(block).build().expect("failed to create katex instance");
+    let html = katex::render_with_opts(&s, opts).expect("error rendering katex");
+
+    Ok(to_value(&html).unwrap())
+}
+
 pub fn base64_encode<S: BuildHasher>(
     value: &Value,
     _: &HashMap<String, Value, S>,

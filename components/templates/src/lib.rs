@@ -36,6 +36,7 @@ lazy_static! {
         ])
         .unwrap();
         tera.register_filter("markdown", filters::markdown);
+        tera.register_filter("katex", filters::katex);
         tera.register_filter("base64_encode", filters::base64_encode);
         tera.register_filter("base64_decode", filters::base64_decode);
         tera
